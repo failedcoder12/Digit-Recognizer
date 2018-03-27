@@ -40,3 +40,42 @@ def display_sample(num):
 
 display_sample(1234)
 
+# Adding layers
+
+model = Sequential()
+
+#input layer of 784 size feds into a ReLU with 512 node
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+
+#Adding Dropout
+model.add(Dropout(0.2))
+
+model.add(Dense(512, activation='relu'))
+
+#Adding Dropout to prevent Overfitting
+model.add(Dropout(0.2))
+
+#Then goes to a 10 nodes with softmax applied
+model.add(Dense(10,activation='softmax'))
+
+#Print about neural network
+print(model.summary())
+
+#setting up loss function and optimizer and running it
+model.compile(loss='categorical_crossentropy',
+	optimizer=RMSprop(),
+	metrics=['accuracy'])
+
+#How data is trained
+history = model.fit(train_images, train_labels,
+	batch_size=100,
+	epochs=10,
+	verbose=2,
+	validation_data=(test_images,test_labels))
+
+print(history)
+
+# getting accuracy
+score = model.evaluate(test_images, test_labels, verbose=0)
+print('Test loss:',score[0])
+print('Test accuracy:',score[1])
