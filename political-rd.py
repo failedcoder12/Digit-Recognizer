@@ -40,22 +40,31 @@ from keras.models import Sequential
 from sklearn.model_selection import cross_val_score
 
 def create_model():
+
+	# Model Sequential
 	model = Sequential()
 
+	# Layer with 32 neuron from weights and 16 inputs 
 	model.add(Dense(32, input_dim=16,kernel_initializer='normal',activation='relu'))
 
+	# Layer with 16 neuron and 1 output each
 	model.add(Dense(16,kernel_initializer='normal',activation='relu'))
 
+	#layer with 1 neuron
 	model.add(Dense(1,kernel_initializer='normal',activation='sigmoid'))
 
+	#Running it on a binary_crossentropy and rmsprop optimizer
 	model.compile(loss='binary_crossentropy',optimizer='rmsprop',metrics=['accuracy'])
 
 	return model	
 
 from keras.wrappers.scikit_learn import KerasClassifier
 
+#Running create model with 100 epoch
 estimator = KerasClassifier(build_fn=create_model, nb_epoch=100, verbose=0)
 
+#using only 10 parties to predict stuffs
 cv_scores = cross_val_score(estimator,all_features,all_classes,cv=10)
 
+#printing it's mean
 print(cv_scores.mean())
